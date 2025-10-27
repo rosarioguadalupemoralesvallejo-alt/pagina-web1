@@ -1,0 +1,31 @@
+<!DOCTYPE html> 
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contacto - CHARO</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="logo">🍰 CHARO</div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="contacto.html" class="active">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Haz tu pedido</h1>
+    <form action="https://formspree.io/f/xpwyrwnq" method="POST">
+      <input type="text" name="nombre" placeholder="Nombre" required>
+      <input type="text" name="producto" placeholder="Producto que deseas" required>
+      <input type="number" name="cantidad" placeholder="Cantidad" required>
+      <textarea name="detalles" placeholder="Detalles del pedido"></textarea>
+      <button type="submit">Enviar Pedido</button>
+    </form>
+  </main>
+</body>
+</html>

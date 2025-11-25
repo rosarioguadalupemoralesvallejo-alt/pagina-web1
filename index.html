@@ -1,0 +1,89 @@
+<!DOCTYPE html> <!-- Indica que el documento usa HTML5 -->
+<html lang="es"> <!-- Lenguaje principal: español -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DULCE ENCANTO</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="logo">
+        <img src="logo.png" alt="Logo Dulce" height="300">
+      </div>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+
+        <li class="dropdown">
+          <a href="#">Menú ▾</a>
+          <ul class="dropdown-content">
+            <li><a href="tortas.html">Tortas</a></li>
+            <li><a href="Cupcakes.html">Cupcakes</a></li>
+            
+            <li><a href="Mousse.html">Mousse</a></li>
+          </ul>
+        </li>
+
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Bienvenido a DULCE ENCANTO</h1>
+    <p>Las mejores tortas y postres para endulzar tu día 🍩</p>
+
+    <!-- ======================= -->
+    <!--   SECCIÓN DE OFERTAS   -->
+    <!-- ======================= -->
+
+    <section class="ofertas">
+      <h2>Ofertas Especiales</h2>
+
+      <!-- ESTE ES EL CONTENEDOR CORRECTO -->
+      <div class="ofertas-grid" id="specials">
+      </div>
+
+    </section>
+
+  </main>
+
+<script>
+const specials = [
+  {id:'t1', name:'Torta de Tres Leches', category:'Tortas', price:80, desc:'Suave y esponjosa', img:'torta tres leches.jpg'},
+  {id:'c1', name:'Cupcake Red Velvet', category:'Cupcakes', price:20, desc:'Tierno y color rojo', img:'cupcake.jpg'},
+  {id:'b1', name:'Brownie Chocolate', category:'Brownies', price:30, desc:'Chocolate suave', img:'brownie1.jpg'},
+  {id:'m1', name:'Mousse De Fresa', category:'Mousse', price:45, desc:'Refrescante y cremoso', img:'mousse.jpg'},
+];
+
+const container = document.getElementById('specials');
+
+specials.forEach(p => {
+
+  const card = document.createElement('div');
+  card.className = 'oferta-card';
+
+  card.innerHTML = `
+    <img src="${p.img}" alt="${p.name}">
+    <h3>${p.name}</h3>
+
+    <a href="${p.category}.html" class="btn categoria">${p.category}</a>
+
+    <p>${p.desc} — ${p.price}bs</p>
+
+    <a href="contacto.html?producto=${encodeURIComponent(p.name)}&precio=${p.price}&cat=${encodeURIComponent(p.category)}" class="btn">
+       COMPRAR
+    </a>
+  `;
+
+  container.appendChild(card);
+
+});
+</script>
+
+</body>
+</html>

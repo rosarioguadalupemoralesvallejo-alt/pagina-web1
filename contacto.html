@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contacto - DULCE ENCANTO</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="logo">CULCE ENCANTO</div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="contacto.html" class="active">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Haz tu pedido</h1>
+    <h3>El costo adicional por envío se cobrará dependiendo de la distancia. Si es solo reserva, indica que recogerás en la tienda.</h3>
+
+    <h2 id="productoSeleccionado" style="text-align:center; color:#a0002d;"></h2>
+
+    <form action="https://formspree.io/f/xpwyrwnq" method="POST">
+      <input type="text" name="nombre" placeholder="Nombre" required>
+      <input type="text" name="producto" placeholder="Producto que deseas" required>
+      <input type="number" name="cantidad" placeholder="Cantidad" required>
+
+      <!-- Ubicación automática del cliente (solo para Formspree, oculto) -->
+      <input type="hidden" id="ubicacionCliente" name="ubicacionCliente">
+
+      <input type="text" name="lugarEntrega" placeholder="Lugar donde deseas recibir el pedido" required>
+
+      <!-- Nuevo campo: modo de pago -->
+      <select name="modoPago" required>
+        <option value="">Selecciona el modo de pago</option>
+        <option value="Efectivo">Efectivo</option>
+        <option value="Transferencia">Transferencia Bancaria</option>
+        <option value="QR">Código QR</option>
+      </select>
+
+      <textarea name="detalles" placeholder="Detalles del pedido"></textarea>
+      <button type="submit">Enviar Pedido</button>
+    </form>
+
+    <br>
+    <h3>📍 Nuestra Pasteleria Dulce Encantose encuentra aquí:</h3>
+    <iframe
+      width="100%"
+      height="300"
+      style="border:0; border-radius: 10px;"
+      loading="lazy"
+      allowfullscreen
+      referrerpolicy="no-referrer-when-downgrade"
+      src="https://www.google.com/maps?q=-19.49235,-64.47436&z=17&output=embed">
+    </iframe>
+  </main>
+
+  <script>
+    // Mostrar el producto seleccionado desde la URL
+    const params = new URLSearchParams(window.location.search);
+    const producto = params.get("producto");
+    if (producto) {
+      document.querySelector('input[name="producto"]').value = producto;
+      document.getElementById("productoSeleccionado").textContent = "🛒 Estás comprando: " + producto;
+    }
+
+    // Detectar ubicación del cliente automáticamente (solo para enviar a Formspree)
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        const ubicacionInput = document.getElementById("ubicacionCliente");
+        ubicacionInput.value = `https://www.google.com/maps?q=${lat},${lon}`;
+      });
+    }
+
+    // Enviar a Formspree y luego WhatsApp sin incluir la ubicación
+    const form = document.querySelector("form");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const data = new FormData(form);
+      const nombre = data.get("nombre");
+      const producto = data.get("producto");
+      const cantidad = data.get("cantidad");
+      const lugarEntrega = data.get("lugarEntrega");
+      const modoPago = data.get("modoPago");
+      const detalles = data.get("detalles");
+
+      // Enviar a Formspree (con la ubicación incluida)
+      const response = await fetch(form.action, {
+        method: "POST",
+        body: data,
+        headers: { Accept: "application/json" }
+      });
+
+      // Si Formspree responde OK, abrir WhatsApp sin incluir la ubicación
+      if (response.ok) {
+        const mensaje = `🍰 *Nuevo pedido CHARO*\n\n👤 Nombre: ${nombre}\n📦 Producto: ${producto}\n🔢 Cantidad: ${cantidad}\n🏠 Lugar de entrega: ${lugarEntrega}\n💰 Modo de pago: ${modoPago}\n📝 Detalles: ${detalles}\n\n📍 Tienda CHARO: https://www.google.com/maps?q=-19.49235,-64.47436`;
+        const telefono = "59173466117"; // Tu número con prefijo
+        const url = `https://api.whatsapp.com/send?phone=${telefono}&text=${encodeURIComponent(mensaje)}`;
+        window.open(url, "_blank");
+
+        alert("✅ Pedido enviado correctamente. Te contactaremos por WhatsApp.");
+        form.reset();
+      } else {
+        alert("❌ Error al enviar el pedido. Intenta nuevamente.");
+      }
+    });
+  </script>
+</body>
+</html>
